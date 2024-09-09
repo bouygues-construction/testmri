@@ -1,0 +1,41 @@
+name: Deploy Azure Dev Web App
+
+on:
+    push:
+      branches:
+        - master
+env:
+  JDK_VERSION: 17    # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: './target'      # set this to the path to your web app project
+  POM_PATH: './'                # set this to the node version to use
+  AZURE_WEBAPP_NAME: 'dev-app-002'
+  APP_URL: 'https://dev-app-002-ejdqeeh6aaegc2hr.westeurope-01.azurewebsites.net'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: 'development'
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+        lfs: false
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ env.JDK_VERSION }}    
+        distribution: 'adopt'
+    - name: 🏗️ Build 
+      run: mvn -f ${{ env.POM_PATH }}pom.xml -B  clean install 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check files built
+      run: |
+        ls -la ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}   
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v4
+      with:
+        name: bycnitvn-dev-poc
+        path: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/*.war'
+
+          
