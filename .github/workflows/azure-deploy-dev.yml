@@ -64,7 +64,9 @@ jobs:
       run: mvn -f pom.xml clean verify sonar:sonar -Dsonar.host.url=${{ env.SONAR_HOST }} -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    - name: Check scan result
+      run: |
+        ls -la  ${{ github.workspace }}/target/sonar 
     - name: ✅ SonarQube Quality Gate Check
       uses: SonarSource/sonarqube-quality-gate-action@v1.0.0
       timeout-minutes: 5
