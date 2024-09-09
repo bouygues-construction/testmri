@@ -15,6 +15,9 @@
 	<packaging>war</packaging>
 	<properties>
 		<java.version>17</java.version>
+		<sonar.projectKey>${project.artifactId}</sonar.projectKey>
+        <sonar.projectName>${project.name}</sonar.projectName>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
 	</properties>
 	<dependencies>
 
